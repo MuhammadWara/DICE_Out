@@ -46,6 +46,7 @@ jobs:
               esac
 
               echo $BUCKET_TO_DEPLOY
+              echo $BUCKET_TO_DEPLOY"Waara"
 
 
       - run: 
