@@ -1,4 +1,3 @@
-
 # Java Gradle CircleCI 2.0 configuration file
 # See: https://circleci.com/docs/2.0/language-java/
 version: 2
@@ -20,28 +19,39 @@ jobs:
 
     working_directory: ~/repo
 
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
 
-      - run: gradle dependencies
+      - run: 
+          name: test env
+          command: |
+            echo BUILD_NUMMBER=012 > $BASH_ENV
+            BUCKET_TO_DEPLOY=""
+            case $CIRCLE_BRANCH in
+                  develop)
+                      BUCKET_TO_DEPLOY=${INT_BUCKET}
+                  ;;
+                  epic)
+                      BUCKET_TO_DEPLOY=${EPIC_BUCKET}
+                  ;;
+                  qat)
+                      BUCKET_TO_DEPLOY=${QAT_BUCKET}
+                  ;;
+                  master)
+                      BUCKET_TO_DEPLOY=${PROD_BUCKET}
+                  ;;
+                  *)
+                      echo "No redeployment URL defined for $CIRCLE_BRANCH; exiting with error"
+                      exit 1
+                  ;;
+              esac
 
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+              echo $BUCKET_TO_DEPLOY
 
-      # run tests!
-      - run: gradle test
+
+      - run: 
+          name: test env echo
+          command: |
+            echo ${BUILD_NUMMBER}
+            echo ${BUCKET_TO_DEPLOY}
