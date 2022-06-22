@@ -25,9 +25,33 @@ jobs:
 
       - run: 
           name: test env
-          command: echo BUILD_NUMMBER=012 > $BASH_ENV
+          command: |
+            echo BUILD_NUMMBER=012 > $BASH_ENV
+            BUCKET_TO_DEPLOY=""
+            case $CIRCLE_BRANCH in
+                  develop)
+                      BUCKET_TO_DEPLOY=${INT_BUCKET}
+                  ;;
+                  epic)
+                      BUCKET_TO_DEPLOY=${EPIC_BUCKET}
+                  ;;
+                  qat)
+                      BUCKET_TO_DEPLOY=${QAT_BUCKET}
+                  ;;
+                  master)
+                      BUCKET_TO_DEPLOY=${PROD_BUCKET}
+                  ;;
+                  *)
+                      echo "No redeployment URL defined for $CIRCLE_BRANCH; exiting with error"
+                      exit 1
+                  ;;
+              esac
+
+              echo $BUCKET_TO_DEPLOY
 
 
       - run: 
           name: test env echo
-          command: echo ${BUILD_NUMMBER}
+          command: |
+            echo ${BUILD_NUMMBER}
+            echo ${BUCKET_TO_DEPLOY}
