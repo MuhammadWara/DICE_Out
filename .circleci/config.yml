@@ -45,8 +45,9 @@ jobs:
                   ;;
               esac
 
-              echo $BUCKET_TO_DEPLOY
+              echo $BUCKET_TO_DEPLOY > t.txt
               echo $BUCKET_TO_DEPLOY"Waara"
+              cat t.txt
 
 
       - run: 
