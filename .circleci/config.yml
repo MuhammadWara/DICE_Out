@@ -28,16 +28,16 @@ jobs:
             BUCKET_TO_DEPLOY=""
             case $CIRCLE_BRANCH in
                   develop)
-                      BUCKET_TO_DEPLOY=${INT_BUCKET}
+                      BUCKET_TO_DEPLOY=${INT_BUCKET} > $BASH_ENV
                   ;;
                   epic)
-                      BUCKET_TO_DEPLOY=${EPIC_BUCKET}
+                      BUCKET_TO_DEPLOY=${EPIC_BUCKET} > $BASH_ENV
                   ;;
                   qat)
-                      BUCKET_TO_DEPLOY=${QAT_BUCKET}
+                      BUCKET_TO_DEPLOY=${QAT_BUCKET} > $BASH_ENV
                   ;;
                   master)
-                      BUCKET_TO_DEPLOY=${PROD_BUCKET}
+                      BUCKET_TO_DEPLOY=${PROD_BUCKET} > $BASH_ENV
                   ;;
                   *)
                       echo "No redeployment URL defined for $CIRCLE_BRANCH; exiting with error"
